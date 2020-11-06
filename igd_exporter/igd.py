@@ -153,6 +153,8 @@ def probe(target_url):
     Metrics are labelled with the service's UDN.
     '''
     device = probe_device(target_url)
+    if device is None:
+        return None
     return Collector(device)
 
 class Collector:
@@ -183,6 +185,8 @@ def probe_device(target_url):
     if url_base is None:
         url_base = target_url
     device = st.find("d:device[d:deviceType='urn:schemas-upnp-org:device:InternetGatewayDevice:%d']/d:deviceList/d:device[d:deviceType='urn:schemas-upnp-org:device:WANDevice:%d']" % (config.args.internet_gateway_device, config.args.wan_device), ns)
+    if device is None:
+        return None
     url_path = device.findtext("d:serviceList/d:service[d:serviceType='urn:schemas-upnp-org:service:WANCommonInterfaceConfig:%d']/d:controlURL" % config.args.wan_common_interface_config, namespaces=ns)
 
     return Device(device.findtext('d:UDN', namespaces=ns), urllib.parse.urljoin(url_base, url_path))

@@ -96,7 +96,11 @@ def probe(environ, start_response):
     qs = urllib.parse.parse_qs(environ['QUERY_STRING'])
 
     reg = prometheus_client.CollectorRegistry()
-    reg.register(igd.probe(qs['target'][0]))
+    probe = igd.probe(qs['target'][0])
+    if probe is None:
+        start_response('404 Not Found', [('Content-Type', 'text/plain')])
+        return [b'Device Not Found\r\n']
+    reg.register(probe)
     body = prometheus_client.generate_latest(reg)
 
     start_response('200 OK', [('Content-Type', prometheus_client.CONTENT_TYPE_LATEST)])
