@@ -14,6 +14,8 @@ import prometheus_client
 from xml.etree import ElementTree
 from xml.etree.ElementTree import Element as E, SubElement as sE, ElementTree as ET, QName
 
+from . import config
+
 class Metric(collections.namedtuple('Metric', 'name desc')):
     '''
     Describes a Prometheus metric.
@@ -180,8 +182,8 @@ def probe_device(target_url):
     url_base = st.findtext('d:URLBase', namespaces=ns)
     if url_base is None:
         url_base = target_url
-    device = st.find("d:device[d:deviceType='urn:schemas-upnp-org:device:InternetGatewayDevice:1']/d:deviceList/d:device[d:deviceType='urn:schemas-upnp-org:device:WANDevice:1']", ns)
-    url_path = device.findtext("d:serviceList/d:service[d:serviceType='urn:schemas-upnp-org:service:WANCommonInterfaceConfig:1']/d:controlURL", namespaces=ns)
+    device = st.find("d:device[d:deviceType='urn:schemas-upnp-org:device:InternetGatewayDevice:%d']/d:deviceList/d:device[d:deviceType='urn:schemas-upnp-org:device:WANDevice:%d']" % (config.args.internet_gateway_device, config.args.wan_device), ns)
+    url_path = device.findtext("d:serviceList/d:service[d:serviceType='urn:schemas-upnp-org:service:WANCommonInterfaceConfig:%d']/d:controlURL" % config.args.wan_common_interface_config, namespaces=ns)
 
     return Device(device.findtext('d:UDN', namespaces=ns), urllib.parse.urljoin(url_base, url_path))
 
