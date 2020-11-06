@@ -9,7 +9,7 @@ import urllib.request
 import urllib.parse
 import wsgiref.headers
 
-import prometheus_client
+import prometheus_client.core
 
 from xml.etree import ElementTree
 from xml.etree.ElementTree import Element as E, SubElement as sE, ElementTree as ET, QName
