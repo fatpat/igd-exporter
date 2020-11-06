@@ -5,13 +5,15 @@ Allows probing of UPnP Internet Gateway Devices (i.e., consumer Internet
 routers) by [Prometheus](https://prometheus.io/). Modelled after the
 [Blackbox exporter](https://github.com/prometheus/blackbox_exporter).
 
-[![Build Status](https://travis-ci.org/yrro/igd-exporter.svg?branch=master)](https://travis-ci.org/yrro/igd-exporter)
+[![Build Status](https://travis-ci.org/fatpat/igd-exporter.svg?branch=master)](https://travis-ci.org/fatpat/igd-exporter)
+
+Fork from [yrro/igd-exporter](https://github.com/yrro/igd-exporter)
 
 Running
 -------
 
 ```
-$ python3 -m pip install git+https://github.com/yrro/igd-exporter.git
+$ python3 -m pip install git+https://github.com/fatpat/igd-exporter.git
 $ igd-exporter
 ```
 
