@@ -84,9 +84,11 @@ def search_socket(sock, timeout, target='ssdp:all'):
     #   ff05::c - site scope - do we have to use IPv6 MLD protocol to recieve
     #             messages from different network segments?
     addr = 'ff02::c' if sock.family == socket.AF_INET6 else '239.255.255.250'
+    port = 1900
+    addrPort = "%s:%d" % (addr, port)
 
     h = wsgiref.headers.Headers([])
-    h['HOST'] = '[{}]'.format(addr) if sock.family == socket.AF_INET6 else addr
+    h['HOST'] = '[{}]'.format(addrPort) if sock.family == socket.AF_INET6 else addrPort
     h['MAN'] = '"ssdp:discover"'
     h['MX'] = str(timeout)
     h['ST'] = target
@@ -94,7 +96,7 @@ def search_socket(sock, timeout, target='ssdp:all'):
     with io.BytesIO() as out:
         out.write(b'M-SEARCH * HTTP/1.1\r\n')
         out.write(bytes(h))
-        sock.sendto(out.getvalue(), (addr, 1900))
+        sock.sendto(out.getvalue(), (addr, port))
 
     result = []
 
